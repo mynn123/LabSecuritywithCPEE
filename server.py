@@ -51,7 +51,7 @@ def simulate_camera_loop():
         if ret:
             filename = f"photo_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')}.jpg"
             filepath = os.path.join(IMAGE_DIR, filename)
-            cv2.imwrite(filename, frame)
+            cv2.imwrite(filepath, frame)
             latest_photo = filename
 
         time.sleep(0.3) # simulate ~3 FPS
@@ -136,6 +136,8 @@ def cleanup_photos():
     deleted = 0
     for fname in os.listdir(IMAGE_DIR):
         fpath = os.path.join(IMAGE_DIR, fname)
+        if not os.path.isfile(fpath):
+            continue   
         try:
             mtime = datetime.datetime.fromtimestamp(os.path.getmtime(fpath))
             if mtime < cutoff:
